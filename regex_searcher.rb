@@ -28,11 +28,7 @@ def is_match_helper(pattern, string, pattern_idx, string_idx)
 	elsif (pattern[pattern_idx] == '*')
 		return is_match_helper(pattern, string, pattern_idx + 1, string_idx)
 	elsif (pattern[pattern_idx - 1] == '*')
-		if pattern_char_exact_match?(pattern[pattern_idx], string[string_idx])
-			return is_match_helper(pattern, string, pattern_idx, string_idx + 1)
-		else
-			return is_match_helper(pattern, string, pattern_idx + 1, string_idx)
-		end
+		handle_asterisk_or_plus_as_previous_char(pattern, string, pattern_idx, string_idx)
 
 	# Logic for '+'
 
@@ -43,22 +39,14 @@ def is_match_helper(pattern, string, pattern_idx, string_idx)
 			return false
 		end
 	elsif (pattern[pattern_idx - 1] == '+')
-		if pattern_char_exact_match?(pattern[pattern_idx], string[string_idx])
-			return is_match_helper(pattern, string, pattern_idx, string_idx + 1)
-		else
-			return is_match_helper(pattern, string, pattern_idx + 1, string_idx)
-		end
+		handle_asterisk_or_plus_as_previous_char(pattern, string, pattern_idx, string_idx)
 
 	# Logic for '?'
 
 	elsif (pattern[pattern_idx] == '?')
 		return (is_match_helper(pattern, string, pattern_idx + 1, string_idx) || is_match_helper(pattern, string, pattern_idx + 2, string_idx))
 	elsif (pattern[pattern_idx - 1] == '?')
-		if pattern_char_exact_match?(pattern[pattern_idx], string[string_idx])
-			return is_match_helper(pattern, string, pattern_idx + 1, string_idx + 1)
-		else
-			return is_match_helper(pattern, string, pattern_idx + 1, string_idx)
-		end
+		handle_question_mark_as_previous_char(pattern, string, pattern_idx, string_idx)
 
 	# Base case where the current char in pattern is '.' or the same as the current char in string. If true, recurse.
 	elsif pattern_char_exact_match?(pattern[pattern_idx], string[string_idx])
@@ -70,6 +58,22 @@ end
 
 def pattern_char_exact_match?(pattern_char, string_char)
 	pattern_char == '.' || (pattern_char == string_char)
+end
+
+def handle_asterisk_or_plus_as_previous_char(pattern, string, pattern_idx, string_idx)
+	if pattern_char_exact_match?(pattern[pattern_idx], string[string_idx])
+		return is_match_helper(pattern, string, pattern_idx, string_idx + 1)
+	else
+		return is_match_helper(pattern, string, pattern_idx + 1, string_idx)
+	end
+end
+
+def handle_question_mark_as_previous_char(pattern, string, pattern_idx, string_idx)
+	if pattern_char_exact_match?(pattern[pattern_idx], string[string_idx])
+		return is_match_helper(pattern, string, pattern_idx + 1, string_idx + 1)
+	else
+		return is_match_helper(pattern, string, pattern_idx + 1, string_idx)
+	end
 end
 
 
