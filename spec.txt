@@ -1,0 +1,96 @@
+# Implementing a Regular-Expression Searcher
+
+For this exercise, create a simple pattern matcher (similar-to but
+different-than regular expressions) that takes two arguments:
+
+- First, the pattern
+- Second, the string you want to match
+
+If the pattern matches the string as defined below, return true.
+Otherwise, return false.
+
+#### Notes ####
+
+- looks like we'll be creating a method that takes two arguments
+- list of rules to turn into code below
+- could turn the rules into their own methods to modularize
+- we don't need to worry about escaping special characters
+- Rules: i) `.` matches any char
+        ii) `?` matches the following char either zero or one times -> an optional match (no forcing)
+       iii) `*` matches the following char either zero or more times (no upper limit) -> an optional match (no forcing)
+        iv) `+` matches the following char one or more times -> a non-optional match
+         v) non-special chars match only that char
+        vi) method must match every char in the input string (second argument) -> matches string in it's entirety
+
+###############
+
+## Matching Behavior
+
+Your application should support these patterns:
+
+- A non-special character in a pattern matches only that character.
+- The special-character `.` in the pattern matches any single character.
+- The special-character `?` in the pattern does not match any character, but
+  indicates the following character in the pattern can match zero or one times.
+- The special-character `*` in the pattern does not match any character, but
+  indicates the following character in the pattern can match zero or more times.
+- The special-character `+` in the pattern does not match anything, but
+  indicates the following character in the pattern can match one or more times.
+
+### Details
+
+The pattern must match every character in the string to be considered a match -
+we are only matching strings in their entirety, unlike `grep` or similar.
+
+For example, the string `abc` matches the patterns `abc`, `...`, `a.c`, and
+`a?bbc` but does _not_ match `..` or `....` (since it must match completely).
+
+You should read the above definitions and then add appropriate test cases in
+addition to those described below.
+
+Note: Do not worry about escaping special characters (e.g., `+`).
+
+## Testing
+
+Here are a few test cases to get you started (though you will certainly want to
+add more):
+```
+# exact match and simple mismatch
+match "abc" "abc"
+no_match "abd" "abc"
+
+# any-char matches -> `.` takes the place of any char
+match "a.c" "a.c"
+match "a.c" "abc"
+
+# an optional pattern char matches with and without -> `?` matches following char zero or one times
+match "a?bc" "abc"   -> one instance of 'b'
+match "a?bc" "ac"    -> zero instances of 'b'
+
+# an optional char that _can_ match is not forced to.
+match "?aab" "ab"    -> `?a` is optional and isn't forced to match, so we essentially match the "ab" part "?aab" to "ab"
+
+# classic log searching
+match "ERROR: *." "ERROR: file not found"        -> matches "ERROR: " and then zero or more matches of `.` which can match any char
+no_match "ERROR: *." "WARNING: file not found"   -> doesn't match because "ERROR: " is not "WARNING: "
+```
+
+
+## Submitting Your Solution
+
+Use any language you're comfortable with and feel free to consult any
+documentation, StackOverflow, etc. as you normally would in your day-to-day
+work.
+
+Pick your desired language from the drop-down above, or, if it isn't supported by
+CoderPad, just let us know and include instructions on how to build and run your
+solution on recent-ish Linux or MacOS systems.
+
+You can develop and run your solution right in CoderPad if you want, or work in
+your preferred environment and paste your code in when you're ready -- just make
+sure that it does run in CoderPad before you're done. Once you're finished, just
+let us know!
+
+
+Note: Since the goal is to _implement_ a form of matching, please _do not_ use
+regex libraries in your solution.
