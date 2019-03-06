@@ -1,4 +1,14 @@
-# Assumption: both arguments will be strings
+# Assumptions made based on the provided spec for the take home exercise:
+# 	- The input for arguments of the regex_searcher method will be strings.
+#   - Since the spec states that we do not neet to worry about escaping special characters (e.g. '+', '?', '*'),
+#     I did not implement any matching for those characters in the string argument of the regex_searcher method.
+
+# Approach:
+# The goal of the regex_searcher is to determine if there is a match between a given pattern and a string.
+# Since we have to compare each character in the pattern and string to determine a match, and there are several special characters
+# in a pattern that provide unique features (e.g. '*', '.', '?', '+'), I chose to implement a recursive solution to consider all possibilities.
+# I also chose to encapsulate the logic for these special characters when in a pattern with several smaller methods.
+# The reason for this design choice was to separate the different pieces of logic, make it easier to change in the future, and keep the code DRY.
 
 def regex_searcher(pattern, string)
 	is_match_helper(pattern, string, 0, 0)
@@ -24,7 +34,7 @@ def is_match_helper(pattern, string, pattern_idx, string_idx)
 	elsif (pattern[pattern_idx - 1] == '*')
 		handle_asterisk_or_plus_as_previous_char(pattern, string, pattern_idx, string_idx)
 
-	# Logic for '+'
+	# Logic for a '+' char in a pattern
 
 	elsif (pattern[pattern_idx] == '+')
 		handle_plus_as_current_char(pattern, string, pattern_idx, string_idx)
@@ -32,7 +42,7 @@ def is_match_helper(pattern, string, pattern_idx, string_idx)
 	elsif (pattern[pattern_idx - 1] == '+')
 		handle_asterisk_or_plus_as_previous_char(pattern, string, pattern_idx, string_idx)
 
-	# Logic for '?'
+	# Logic for a '?' char in a pattern
 
 	elsif (pattern[pattern_idx] == '?')
 		return (is_match_helper(pattern, string, pattern_idx + 1, string_idx) || is_match_helper(pattern, string, pattern_idx + 2, string_idx))
@@ -137,6 +147,5 @@ puts regex_searcher('?aab', 'ab') == true
 puts "", "Tests for classic log searching"
 puts regex_searcher('ERROR: *.', 'ERROR: file not found') == true
 puts regex_searcher('ERROR: *.', 'WARNING: file not found') == false
-
 
 
