@@ -83,11 +83,15 @@ puts "Tests for exact matches"
 puts regex_searcher('abc', 'abc') == true
 # simple mismatch
 puts regex_searcher('abd', 'abc') == false
+puts regex_searcher('a', 'abc') == false
+puts regex_searcher('abc', 'a') == false
 
 # any-char matches
 puts "", "Tests for any-char matches"
 puts regex_searcher('a.c', 'a.c') == true
 puts regex_searcher('a.c', 'abc') == true
+puts regex_searcher('..', 'abc') == false
+puts regex_searcher('....', 'abc') == false
 
 # optional pattern char '*' matches with and without
 puts "", "Tests for optional pattern char '*' matches with and without"
@@ -105,6 +109,7 @@ puts "", "Tests for optional pattern char '?' matches with and without"
 puts regex_searcher('a?bc', 'abc') == true
 puts regex_searcher('a?bc', 'ac') == true
 puts regex_searcher('a?b', 'a') == true
+puts regex_searcher('a?bbc', 'abc') == true
 
 # an optional char that can match but is not forced to
 puts "", "Tests for optional pattern char '?' that can match but is not forced to"
