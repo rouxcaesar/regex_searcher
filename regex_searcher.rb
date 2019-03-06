@@ -43,7 +43,7 @@ def is_match_helper(pattern, string, pattern_idx, string_idx)
 	# Base case where the current char in pattern is '.' or the same as the current char in string. If true, recurse.
 	elsif pattern_and_string_chars_exact_match?(pattern[pattern_idx], string[string_idx])
 		return is_match_helper(pattern, string, pattern_idx + 1, string_idx + 1)
-		
+
 	else
 		return false
 	end
